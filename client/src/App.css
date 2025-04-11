@@ -1,38 +1,94 @@
-.App {
+.app {
   text-align: center;
+  font-family: Arial, sans-serif;
+  margin-top: 30px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.calendar-layout {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: flex-start;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.calendar-container {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.sidebar {
+  background-color: #f7f7f7;
+  border-left: 3px solid #0077ff;
+  padding: 20px;
+  width: 250px;
+  border-radius: 8px;
+  text-align: left;
+}
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.sidebar select {
+  margin-top: 5px;
+  width: 100%;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.sidebar select[multiple] {
+  height: 120px;
+  padding: 8px;
+  width: 100%;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+.close-button:hover {
+  color: #ff0000;
+}
+
+label {
+  display: block;
+  margin-top: 20px;
+}
+
+.submit-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #858585;
   color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
 }
 
-.App-link {
-  color: #61dafb;
+.submit-button:hover {
+  background-color: #005fcc;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.button-container {
+  display: flex;
+  justify-content: flex-end;
 }
+
+
+
+
+
