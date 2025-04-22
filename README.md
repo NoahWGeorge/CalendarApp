@@ -1,70 +1,105 @@
-# Getting Started with Create React App
+📅 Sport Scheduler App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the Sport Scheduler App — a full-stack project featuring a React.js frontend and a Node.js backend.
 
-## Available Scripts
 
-In the project directory, you can run:
+✨ Overview
 
-### `npm start`
+This app allows users to:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🔒 Login securely before accessing the calendar
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+🏀 Select a sport and assign group members to specific days
 
-### `npm test`
+🔄 Manage selections with Reset and Submit buttons
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+🎨 Enjoy a clean, responsive UI with toast notifications
 
-### `npm run build`
+❤️ Built with React, Node, and Express
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+🚀 Features
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+🔐 Login Screen
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Username and Password authentication
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Simple credentials validation(Username: admin, Password: password)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Error messages with toast notifications if login fails
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+📅 Calendar Dashboard
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Interactive calendar (powered by react-calendar)
 
-### Code Splitting
+Click on any date to open a sidebar popup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Choose a sport from a dropdown
 
-### Analyzing the Bundle Size
+Select multiple group members for a given date
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Submit or Reset selections with stylish buttons
 
-### Making a Progressive Web App
+Toast notifications for successful actions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+🛠 Tech Stack
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Frontend: React.js, React Calendar, React Toastify
 
-### Deployment
+Backend: Node.js, Express.js (basic setup)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Styling: CSS Flexbox, Custom Components
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+🧪 Getting Started
+
+1. Clone the repository
+
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+
+2. Install dependencies
+
+Frontend:
+
+cd client
+npm install
+
+Backend:
+
+cd ../server
+npm install
+
+3. Run the app
+
+Open two terminals:
+
+Terminal 1 (Backend):
+
+cd server
+node index.js
+
+Terminal 2 (Frontend):
+
+cd client
+npm start
+
+
+📸 Screenshots
+
+Login Page
+
+Calendar App
+
+
+📄 License
+
+This project is licensed under the MIT License.Feel free to fork and build upon it!
+
+👨‍💻 Author
+
+Developed by @NoahWGeorge
