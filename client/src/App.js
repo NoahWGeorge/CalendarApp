@@ -48,12 +48,14 @@ function App() {
   };
 
   return (
-    <div className="app">
+    <div> className="app"
+    <button onClick="My Function()"><position> 🏠Home </position></button>
+    <button onClick="My Function()"><position> 👨Profile </position></button>
       <h1>📅 My Calendar App</h1>
       <div className="calendar-layout">
         <div className="calendar-container">
           <Calendar onChange={onDateClick} value={date} />
-        </div>
+    </div>
 
         {showSidebar && (
           <div className="sidebar">
