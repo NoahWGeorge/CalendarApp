@@ -1,58 +1,14 @@
 import React, { useState } from 'react';
+import { Amplify, Auth } from 'aws-amplify';
+import awsConfig from './amplifyConfig';
 import Calendar from 'react-calendar';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-calendar/dist/Calendar.css';
 import 'react-toastify/dist/ReactToastify.css';
+import '@aws-amplify/ui-react/styles.css';
 import './App.css';
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  return (
-    <div className="app">
-      <ToastContainer />
-      {isLoggedIn ? <CalendarApp /> : <LoginPage setIsLoggedIn={setIsLoggedIn} />}
-    </div>
-  );
-}
-
-function LoginPage({ setIsLoggedIn }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleLogin = () => {
-    // 🔐 Simple fake login
-    if (username === 'admin' && password === 'password') {
-      setIsLoggedIn(true);
-    } else {
-      toast.error('Invalid credentials!', {
-        position: 'top-right',
-        autoClose: 2000,
-      });
-    }
-  };
-
-  return (
-    <div className="login-container">
-      <h1>🔒 Login</h1>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={e => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <button className="login-button" onClick={handleLogin}>
-        Login
-      </button>
-    </div>
-  );
-}
+Amplify.configure(awsConfig);
 
 function CalendarApp() {
   const [date, setDate] = useState(new Date());
@@ -161,4 +117,39 @@ function CalendarApp() {
   );
 }
 
-export default App;
+function SignInButton() {
+  const handleSignIn = () => {
+    Auth.federatedSignIn(); // Forces redirect to Cognito Hosted UI
+  };
+  return (
+    <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+      <button onClick={handleSignIn} style={{ fontSize: '1.25rem', padding: '1em 2em' }}>
+        Sign In with Hosted UI
+      </button>
+    </div>
+  );
+}
+
+export default function App() {
+  const [user, setUser] = React.useState(null);
+
+  React.useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then(setUser)
+      .catch(() => setUser(null));
+  }, []);
+
+  if (!user) {
+    return <SignInButton />;
+  }
+
+  return (
+    <div className="app">
+      <ToastContainer />
+      <button style={{ float: 'right' }} onClick={() => Auth.signOut()}>
+        Sign Out
+      </button>
+      <CalendarApp />
+    </div>
+  );
+}
