@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Amplify, Auth } from 'aws-amplify';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import awsConfig from './amplifyConfig';
 import Calendar from 'react-calendar';
 import { ToastContainer, toast } from 'react-toastify';
+import Navbar from './components/Navbar';
+import ProfilePage from './pages/profile';
 import 'react-calendar/dist/Calendar.css';
 import 'react-toastify/dist/ReactToastify.css';
 import '@aws-amplify/ui-react/styles.css';
@@ -26,17 +29,13 @@ function CalendarApp() {
     setShowSidebar(true);
   };
 
-  const handleSportChange = e => {
-    setSelectedSport(e.target.value);
-  };
+  const handleSportChange = e => setSelectedSport(e.target.value);
 
   const handlePersonChange = e => {
     const options = e.target.options;
     const selected = [];
     for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        selected.push(options[i].value);
-      }
+      if (options[i].selected) selected.push(options[i].value);
     }
     setSelectedPeople(selected);
   };
@@ -44,10 +43,7 @@ function CalendarApp() {
   const handleReset = () => {
     setSelectedSport('');
     setSelectedPeople([]);
-    toast.info('Selections reset!', {
-      position: 'top-right',
-      autoClose: 2000,
-    });
+    toast.info('Selections reset!', { position: 'top-right', autoClose: 2000 });
   };
 
   const handleSubmit = () => {
@@ -56,100 +52,144 @@ function CalendarApp() {
       sport: selectedSport,
       people: selectedPeople,
     });
-
     setSelectedSport('');
     setSelectedPeople([]);
     setShowSidebar(false);
   };
 
   return (
-    <div>
-      <h1>📅 My Calendar App</h1>
-      <div className="calendar-layout">
-        <div className="calendar-container">
-          <Calendar onChange={onDateClick} value={date} />
-        </div>
-
-        {showSidebar && (
-          <div className="sidebar">
-            <div className="sidebar-header">
-              <h2>{clickedDate}</h2>
-              <button className="close-button" onClick={() => setShowSidebar(false)}>
-                ❌
-              </button>
-            </div>
-
-            <label>Select a Sport:</label>
-            <select onChange={handleSportChange} value={selectedSport}>
+  <>
+    <div className="calendar-layout">
+      <div className="calendar-container">
+        <Calendar onChange={onDateClick} value={date} />
+      </div>
+    </div>
+    {showSidebar && (
+      <div className="modal-overlay" onClick={() => setShowSidebar(false)}>
+        <div
+          className="modal-content"
+          onClick={e => e.stopPropagation()}
+        >
+          <button
+            className="close-button"
+            onClick={() => setShowSidebar(false)}
+            title="Close"
+          >
+            &#10006;
+          </button>
+          <h2 className="modal-title">{clickedDate}</h2>
+          <div className="modal-body">
+            <label className="modal-label">Select a Sport:</label>
+            <select
+              className="modal-select"
+              onChange={handleSportChange}
+              value={selectedSport}
+            >
               <option value="">-- Choose a sport --</option>
               {sportsOptions.map(sport => (
-                <option key={sport} value={sport}>
-                  {sport}
-                </option>
+                <option key={sport} value={sport}>{sport}</option>
               ))}
             </select>
-
-            <label style={{ marginTop: '20px', display: 'block' }}>
+            <label
+              className="modal-label"
+              style={{ marginTop: 16 }}
+            >
               Who in the group would you like to add?
             </label>
-            <select multiple onChange={handlePersonChange} value={selectedPeople}>
+            <select
+              className="modal-multiselect"
+              multiple
+              onChange={handlePersonChange}
+              value={selectedPeople}
+              size={Math.min(5, groupMembers.length)}
+            >
               {groupMembers.map(person => (
-                <option key={person} value={person}>
-                  {person}
-                </option>
+                <option key={person} value={person}>{person}</option>
               ))}
             </select>
-
             {(selectedSport || selectedPeople.length > 0) && (
               <div className="button-container">
-                <button className="reset-button" onClick={handleReset}>
-                  🔄 Reset
+                <button className="modal-btn reset" onClick={handleReset}>
+                  <span role="img" aria-label="Reset">🔄</span> Reset
                 </button>
-                <button className="submit-button" onClick={handleSubmit}>
-                  ✅ Submit
+                <button className="modal-btn submit" onClick={handleSubmit}>
+                  <span role="img" aria-label="Submit">✅</span> Submit
                 </button>
               </div>
             )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    )}
+  </>
+);
+
+}
+
+function MainPage({ user, onSignOut }) {
+  return (
+    <>
+      <Navbar user={user} onSignOut={onSignOut} />
+      <ToastContainer />
+      <div style={{ paddingTop: 80 }}>
+        <CalendarApp />
+      </div>
+    </>
   );
 }
 
-function SignInButton() {
-  const handleSignIn = () => {
-    Auth.federatedSignIn(); // Forces redirect to Cognito Hosted UI
-  };
-  return (
-    <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
-      <button onClick={handleSignIn} style={{ fontSize: '1.25rem', padding: '1em 2em' }}>
-        Sign In with Hosted UI
-      </button>
-    </div>
-  );
-}
 
 export default function App() {
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     Auth.currentAuthenticatedUser()
-      .then(setUser)
-      .catch(() => setUser(null));
+      .then(u => setUser(u))
+      .catch(() => setUser(null))
+      .finally(() => setAuthChecked(true));
   }, []);
 
-  if (!user) {
-    return <SignInButton />;
+  useEffect(() => {
+    // Only redirect if we've finished checking AND there's no user
+    if (authChecked && user === null) {
+      Auth.federatedSignIn();
+    }
+  }, [authChecked, user]);
+
+  const handleSignOut = () => {
+    Auth.signOut();
+  };
+
+  if (!authChecked) {
+    return <div>Loading...</div>;
   }
 
+  if (!user) return null; // Will only briefly flicker, since redirect triggers
+
   return (
-    <div className="app">
-      <ToastContainer />
-      <button style={{ float: 'right' }} onClick={() => Auth.signOut()}>
-        Sign Out
-      </button>
-      <CalendarApp />
-    </div>
-  );
+  <div className="app">
+    {/* Animated background blobs */}
+    <div className="background-blob"></div>
+    <div className="background-blob2"></div>
+    
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainPage user={user} onSignOut={handleSignOut} />} />
+        <Route
+          path="/profile"
+          element={
+            <>
+              <Navbar user={user} onSignOut={handleSignOut} />
+              <ProfilePage />
+            </>
+          }
+        />
+      </Routes>
+    </Router>
+  </div>
+);
+
 }
+
+
